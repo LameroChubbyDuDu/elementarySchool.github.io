@@ -41,11 +41,12 @@
 
     .bg {
         background-image: url("img/bg.png"), url("img/mask.png");
-        background-blend-mode: normal;
+        background-blend-mode: multiply;
         background-repeat: no-repeat;
         background-size: cover;
 
         filter:blur(8px);
+        transform: scale(1.2);
 
         position: fixed;
         top: 0;
@@ -57,111 +58,54 @@
         z-index: -1;
     }
 
-    .go {
-        font-family: "Pixelify Sans", sans-serif;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%);
-
-        padding: 8px 15px;
-        margin: 0;
-
-        text-align: center;
-
-        color: azure;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 20px;
-
-        font-size: 30px;
-
-    }
-
-    .img-1 {
-        position: absolute;
-        z-index: 2;
-        width: 200px;
-        display: none;
-        top:10%;
-        /* right: 150px;
-        top: 15%;
-        rotate: -25deg; */
-    }
-
-    .img-2 {
-        position: absolute;
-        z-index: 2;
-        width: 100px;
-        display: none;
-        top:10%;
-
-    }
-
-    @keyframes img-animation-1{
-        0%{right: -10px;}
-        50%{right: 50px; transform: rotateX(20deg); transform:rotate(30deg);}
-        100%{right: 100px; transform: rotateX(-30deg); transform: rotate(-40deg);}
-    }
-
-    @keyframes img-animation-2{
-        0%{left: -10px;}
-        50%{left: 50px; transform: rotateX(20deg); transform:rotate(-30deg);}
-        100%{left: 150px; transform: rotateX(-30deg); transform: rotate(40deg);}
-    }
-
-    .interactive-element:has(.go:hover) .bg{
-        background-blend-mode: multiply;
-        filter: blur(0px);
-    }
-    /* .go:hover+.bg {
-        background-blend-mode: multiply;
-    } */
-
-    .interactive-element:has(.go:hover) .img-1{
-        display: block;
-        animation: img-animation-1 0.5s linear forwards;
-    }
-
-    .interactive-element:has(.go:hover) .img-2{
-        display: block;
-        animation: img-animation-2 0.5s linear forwards;
-    }
-
-    .go:hover {
-        background-color: rgba(255, 255, 255, 0.5);
-    }
-
     .menu {
         display: flex;
-        flex-direction: column;
+        /* flex-direction: row; */
         justify-content: flex-start;
         align-items: flex-start;
         text-align: left;
         left: 0px;
         /* gap: 20px; */
+        margin-top: -25px;
         z-index: 1;
     }
 
-    .elements {
+    .navBar {
         position: absolute;
+        width: 100%;
+        margin-left: -10px;
+    }
+
+    .elements {
+        position: relative;
         margin-left: 0px;
         text-decoration: none;
-
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        background-color: #0a0a0a;
+        height: 30px;
     }
 
     .item-1,
     .item-2 {
+        font-family: "Pixelify Sans", sans-serif;
         list-style-type: none;
 
         text-align: left;
 
         color: aliceblue;
-        background-color: #65aeb8;
+        background-color: transparent;
 
-        font-size: 30px;
-        /* width: 5vw; */
-        /* padding: 2px 8px; */
+        font-size: 18px;
+        margin: 10px;
 
+    }
+
+    .bot-pic {
+        vertical-align: middle;
+        width: 15px;
+        margin-right: 5px;
     }
 
     .item-2 {
@@ -179,7 +123,7 @@
     }
 
     .item-1:hover .second-elements {
-        background-color: #468992;
+        background-color: rgba(96, 96, 96, 0.5);
         width: inherit;
     }
 
@@ -187,10 +131,10 @@
         display: none;
         list-style-type: none;
         color: aliceblue;
-        background-color: #468992;
+        background-color: rgba(96, 96, 96, 0.5);
         width: inherit;
         padding: 0px;
-        font-size: 30px;
+        font-size: 18px;
     }
 
     .second-item {
@@ -226,14 +170,13 @@
 <body>
     <div class="interactive-element">
         <div class="bg"></div>
-        <img class="img-1" src="img/taxi.PNG">
-        <img class="img-2" src="img/bus_stand.PNG">
+        
     </div>
     <div class="menu">
-        <nav class="ai-page">
+        <nav class="navBar">
             <ul class="elements">
-                <li class="item-2"><a style="text-decoration: none;" href="ai.html" class="ai-link">Store</a></li>
-                <li class="item-1">AI
+                <li class="item-2"><a style="text-decoration: none;" href="ai.html" class="ai-link"><img class="bot-pic" src="img/bot.png">Mr.Bot</a></li>
+                <li class="item-1">Works
                     <ul class="second-elements">
                         <li class="second-item">ABC</li>
                         <li class="second-item">DEF</li>
@@ -247,12 +190,6 @@
     <footer><span>&copy;</span> xtdesign</footer>
     <body>
         <script>
-            const go = document.getElementsByClassName("go")[0];
-
-            go.addEventListener('click', ()=>{
-                console.log("go");
-                window.location.replace('main.html');
-            })
         </script>
 
 </html>
