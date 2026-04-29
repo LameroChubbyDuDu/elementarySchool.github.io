@@ -4,12 +4,19 @@
     @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Titan+One&family=Vast+Shadow&display=swap');
 
+    @font-face {
+        font-family: "Cubic11";
+        src: url("https://raw.githubusercontent.com/ACh-K/Cubic-11/main/fonts/web/Cubic_11.woff2") format("woff2");
+        font-weight: normal;
+        font-style: normal;
+    }
+
     body {
         margin: 0%;
         padding: 0%;
         text-align: left;
         overflow-x: hidden;
-        cursor: url("img/dotted.png"), auto;
+        cursor: url("img/arrow.png"), auto;
     }
 
     .bg {
@@ -57,7 +64,7 @@
         flex-direction: row;
         width: 100%;
         background-color: #0a0a0a;
-        height: 40px;
+        height: 50px;
 
         padding: 0 20px;
     }
@@ -71,7 +78,7 @@
         color: aliceblue;
         background-color: transparent;
 
-        font-size: 25px;
+        font-size: 30px;
         margin-right: 30px;
         margin: 10px;
         margin-left: auto;
@@ -83,8 +90,10 @@
 
     .conversation {
         background-color: rgba(255, 255, 255, 0.6);
+        /* background-color: transparent; */
         width: 40%;
-        height: 60%;
+        height: 64px;
+        border-radius: 20px;
         position: absolute;
         top: 20%;
         left: 50%;
@@ -93,21 +102,22 @@
 
         display: flex;
         align-items: center;
-        flex-direction: column;
+        /* flex-direction: row; */
+        justify-content: space-between;
+
+        /* box-shadow:white 2px 3px 5px; */
     }
 
     .txt {
-        top: 10%;
-        border-radius: 50px;
-        width: 40%;
-        position: absolute;
-        left: 50%;
-        min-height: 50px;
+        font-family: "Cubic11";
+        background: transparent;
+        outline: none;
+        border: none;
         text-wrap: wrap;
         overflow-wrap: break-word;
         word-break: break-all;
-        transform: translateX(-50%);
-        padding: 10px;
+        flex: 1;
+        margin-left: 20px;
     }
 
     label {
@@ -128,17 +138,10 @@
     }
 
     .enter {
-        font-family: "Pixelify Sans", sans-serif;
-        font-size: 30px;
-        width: 120px;
-        height: 80px;
-        background-color: rgb(0, 0, 0);
-        border-radius: 60px;
-        color: aliceblue;
-
-        z-index: 20;
-        position: absolute;
-        top: 70%;
+        width: 64px;
+        height: 64px;
+        background-color: transparent;
+        margin-left: 8px;
     }
 
     .generatedImg {
@@ -148,12 +151,13 @@
         position: absolute;
         left: 50%;
         transform: translate(-50%);
-        top: 100%;
+        /* top: 100%; */
+        bottom: 20%;
     }
 
     .loading {
         position: absolute;
-        top: 120%;
+        bottom: 30%;
         left: 50%;
         transform: translate(-50%);
         width: 80px;
@@ -178,8 +182,24 @@
     }
 
     @keyframes loadingAnimation {
-        0% {transform: translate(-50%, -50%) rotate(0deg);}
-        100% {transform: translate(-50%, -50%) rotate(360deg);}
+        0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+            width: 80px;
+            height: 80px;
+        }
+
+        50% {
+            opacity: 0.5;
+            width: 60px;
+            height: 60px;
+        }
+
+        100% {
+            transform: translate(-50%, -50%) rotate(360deg);
+            opacity: 1;
+            width: 80px;
+            height: 80px;
+        }
     }
 
     @media(min-width:1200px) {}
@@ -200,14 +220,16 @@
     </div>
 
     <div class="conversation">
-        <input type="text" placeholder="請輸入prompt..." class="txt"><br>
+        <input type="text" placeholder="請輸入prompt..." class="txt">
+        <img class="enter" src="img/submit.png">
         <!-- <label for="refImg">choose your reference image</label>
         <input type="file" class="refImg" id="refImg"> -->
-        <input type="submit" class="enter" value="submit">
-        
+
+        <!-- <input type="submit" class="enter" value="submit"> -->
+
     </div>
     <img class="generatedImg">
-    <img src="img/loading.png" class="loading">
+    <img src="img/loading-2.png" class="loading">
 
     <footer><span>&copy;</span> xtdesign</footer>
 
@@ -220,13 +242,21 @@
             const loading = document.getElementsByClassName("loading")[0];
 
             back.addEventListener('click', () => {
-                window.location.replace('index.html');
+                window.location.replace('main.html');
             });
+
+            submit.addEventListener('mouseenter', async () => {
+                submit.src = 'img/submit-hover.png'
+            })
+
+            submit.addEventListener('mouseleave', async () => {
+                submit.src = 'img/submit.png'
+            })
 
             submit.addEventListener('click', async () => {
                 console.log(txt.value);
-                loading.style.display='block';
-                loading.style.animation='loadingAnimation linear 2s infinite';
+                loading.style.display = 'block';
+                loading.style.animation = 'loadingAnimation linear 2s infinite';
                 askAI();
 
             })
@@ -236,18 +266,23 @@
                 const prompt = document.getElementsByClassName("txt")[0].value;
                 const submit = document.getElementsByClassName("enter")[0];
 
+                console.log("發送訊息: ", prompt);
+
                 const response = await fetch('http://localhost:3000/generate-img', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: prompt })
                 });
+
+                console.log(response.status);
+
                 const resImg = await response.json();
-                
-                img.onload = ()=> {
+
+                img.onload = () => {
                     // loading.setAttribute("style", "animation: none");
                     // loading.setAttribute("style", "display: none");
-                    loading.style.display='none';
-                loading.style.animation='none';
+                    loading.style.display = 'none';
+                    loading.style.animation = 'none';
                 }
 
                 try {
